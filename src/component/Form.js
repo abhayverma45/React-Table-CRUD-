@@ -1,32 +1,43 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const Contact = () => {
-  const [Data, setData] = useState({
-    fullname: " ",
-    phone: " ",
-    email: " ",
-    msg: " ",
-  });
-  const InputEvent = (event) => {
-    const { name, value } = event.target;
+  const [Name, setName] = useState("");
+  const [Phone, setPhone] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Hob, setHob] = useState("");
 
-    setData((preVal) => {
-      return {
-        ...preVal,
-        [name]: value,
-      };
-    });
+  // to store what is written in input boxes we use two attributes
+  //1. value={state}
+  //2. onChange=(e)=>setstate(e.target.value)}
+
+  const handlesubmit = async () => {
+    try {
+      console.log("yes entered");
+      const response = await axios.post("/api/formdata", {
+        Name,
+        Phone,
+        Email,
+        Hob,
+      });
+
+      if (response.data.success) {
+        alert("Content successfully saved");
+      }
+    } catch (error) {
+      console.log(error);
+      alert(error);
+    }
   };
+
   const formSubmit = (e) => {
     e.preventDefault();
-    alert(
-      `My name is ${Data.fullname}.my mobile no is ${Data.phone}. email is ${Data.email}.`
-    );
+    alert(`saved successfully`);
   };
   return (
     <>
       <div className="my-5">
-        <h1 className="text-center">Contact US</h1>
+        <h1 className="text-center">Register</h1>
       </div>
       <div className="container contact_div">
         <div className="row">
@@ -38,9 +49,9 @@ const Contact = () => {
                   type="text"
                   class="form-control"
                   id="exampleFormControlInput1"
-                  Name="fullname"
-                  value={Data.fullname}
-                  onChange={InputEvent}
+                  Name="Name"
+                  value={Name}
+                  onChange={(e) => setName(e.target.value)}
                   placeholder="Enter your Name"
                 />
               </div>
@@ -50,9 +61,9 @@ const Contact = () => {
                   type="number"
                   class="form-control"
                   id="exampleFormControlInput1"
-                  Name="phone"
-                  value={Data.phone}
-                  onChange={InputEvent}
+                  Name="Phone"
+                  value={Phone}
+                  onChange={(e) => setPhone(e.target.value)}
                   placeholder="Mobile number"
                 />
               </div>
@@ -63,8 +74,8 @@ const Contact = () => {
                   class="form-control"
                   id="exampleFormControlInput1"
                   Name="email"
-                  value={Data.email}
-                  onChange={InputEvent}
+                  value={Email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
                 />
               </div>
@@ -76,13 +87,17 @@ const Contact = () => {
                   id="exampleFormControlTextarea1"
                   rows="3"
                   Name="msg"
-                  value={Data.msg}
-                  onChange={InputEvent}
+                  value={Hob}
+                  onChange={(e) => setHob(e.target.value)}
                 ></textarea>
               </div>
-              <br/>
+              <br />
               <div className="col-12">
-                <button class="btn btn-outline-primary" type="submit">
+                <button
+                  class="btn btn-outline-primary"
+                  type="submit"
+                  onClick={() => handlesubmit()}
+                >
                   Submit form
                 </button>
               </div>
